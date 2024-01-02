@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 void main() {
   runApp(MyApp());
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       routes: {
         '/': (context) => MainScreen(),
-        '/alarm': (context) => AlarmSettingScreen(),
+        '/alarm': (context) => LiveClock(),
       },
       initialRoute: '/',
     );
@@ -67,6 +68,60 @@ class AlarmSettingScreen extends StatelessWidget {
         child: Text(
           '8:00',
           style: TextStyle(color: Colors.white, fontSize: 100),
+        ),
+      ),
+    );
+  }
+}
+
+
+class LiveClock extends StatefulWidget {
+  @override
+  _LiveClockState createState() => _LiveClockState();
+}
+
+class _LiveClockState extends State<LiveClock> {
+  String _timeString = '';
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timeString = _formatDateTime(DateTime.now());
+    _timer = Timer.periodic(Duration(minutes: 1), (Timer t) => _getTime());
+  }
+
+  void _getTime() {
+    final String formattedDateTime = _formatDateTime(DateTime.now());
+    setState(() {
+      _timeString = formattedDateTime;
+    });
+  }
+
+  String _formatDateTime(DateTime dateTime) {
+    return '${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xFF1B1826),
+      appBar: AppBar(
+        title: Text('Live Clock'),
+      ),
+      body: Center(
+        child: Text(
+          _timeString,
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: 110
+          ),
         ),
       ),
     );
