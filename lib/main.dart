@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'widgets/time_picker.dart';
+import 'controllers/time_picker_controller.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -16,6 +19,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 
 class MainScreen extends StatelessWidget {
   @override
@@ -52,6 +56,8 @@ class MainScreen extends StatelessWidget {
 }
 
 class AlarmSettingScreen extends StatelessWidget {
+  final _controller = TimePickerController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,11 +70,23 @@ class AlarmSettingScreen extends StatelessWidget {
         ),
       ),
       body: Center(
-        child: Text(
-          '8:00',
-          style: TextStyle(color: Colors.white, fontSize: 100),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            TimePicker(controller: _controller),
+            IconButton(
+              icon: const Icon(Icons.access_time),
+              onPressed: resetTime,
+            ),
+          ],
         ),
       ),
     );
   }
+
+  void resetTime() {
+    _controller.setTime(DateTime.now());
+  }
 }
+
