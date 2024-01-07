@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 
 class TimePickerController {
-  // コントローラーをプライベートから公開に変更
   final FixedExtentScrollController hourController;
   final FixedExtentScrollController minuteController;
 

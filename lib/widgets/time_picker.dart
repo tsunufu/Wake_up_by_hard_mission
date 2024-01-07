@@ -67,7 +67,6 @@ Widget _buildLabel(BuildContext context, int number) {
   return Text(
     number.toString().padLeft(2, '0'),
     style: TextStyle(
-      // テキストの色を白に変更
       color: Colors.white,
       fontSize: 32,
     ),
