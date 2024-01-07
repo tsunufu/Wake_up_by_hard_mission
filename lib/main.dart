@@ -3,8 +3,11 @@ import 'widgets/time_picker.dart';
 import 'controllers/time_picker_controller.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'dart:typed_data';
+import 'package:alarm/alarm.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Alarm.init();
   runApp(MyApp());
 }
 
@@ -14,7 +17,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       routes: {
         '/': (context) => MainScreen(),
-        '/alarm': (context) => AlarmSettingScreen(),
+        '/set_alarm': (context) => AlarmSettingScreen(),
         '/wake_up': (context) => WakeUpScreen(),
         '/qr_scan': (context) => QRScanScreen(),
       },
@@ -31,14 +34,14 @@ class MainScreen extends StatelessWidget {
       backgroundColor: Color(0xFF1B1826),
       body: Center(
         child: Image(
-          image: AssetImage('images/main_image.png'),
+          image: AssetImage('assets/images/main_image.png'),
         ),
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/wake_up');
+            Navigator.pushNamed(context, '/set_alarm');
           },
           child: Text(
             'Get Start!',
@@ -82,6 +85,14 @@ class AlarmSettingScreen extends StatelessWidget {
               icon: const Icon(Icons.access_time),
               onPressed: resetTime,
             ),
+            ElevatedButton(
+              child: Text('Set Alarm'),
+              onPressed: () => setAlarm(context),
+            ),
+            ElevatedButton(
+              child: Text('Stop Alarm'),
+              onPressed: () => stopAlarm(context),
+            ),
           ],
         ),
       ),
@@ -90,6 +101,49 @@ class AlarmSettingScreen extends StatelessWidget {
 
   void resetTime() {
     _controller.setTime(DateTime.now());
+  }
+
+  Future<void> setAlarm(BuildContext context) async {
+    final now = DateTime.now();
+    final selectedHour = _controller.hour;
+    final selectedMinute = _controller.minute;
+    final dateTime = DateTime(now.year, now.month, now.day, selectedHour, selectedMinute);
+
+    final alarmSettings = AlarmSettings(
+      id: 0,
+      dateTime: dateTime,
+      assetAudioPath: 'assets/musics/alarm.mp3',
+      loopAudio: true,
+      vibrate: true,
+      fadeDuration: 3.0,
+      notificationTitle: 'Alarm',
+      notificationBody: 'Wake Up!',
+      enableNotificationOnKill: true,
+    );
+
+    try {
+      await Alarm.set(alarmSettings: alarmSettings);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Alarm set for $selectedHour:$selectedMinute')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to set alarm: $e')),
+      );
+    }
+  }
+
+  Future<void> stopAlarm(BuildContext context) async {
+    try {
+      await Alarm.stop(0);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Alarm stopped')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to stop alarm: $e')),
+      );
+    }
   }
 }
 
