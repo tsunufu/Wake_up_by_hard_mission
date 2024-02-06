@@ -26,40 +26,79 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF1B1826),
-      body: Center(
-        child: Image(
-          image: AssetImage('assets/images/main_image.png'),
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: ElevatedButton(
-          onPressed: () {
-            Navigator.pushNamed(context, '/set_alarm');
-          },
-          child: Text(
-            'Get Start!',
-            style: TextStyle(fontSize: 16),
-          ),
-          style: ElevatedButton.styleFrom(
-            primary: Color(0xFFE3C7FF),
-            onPrimary: Colors.black,
-            padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
-            ),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(height: 16),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'welcome to sleep!',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Center(
+                  child: Image(
+                    image: AssetImage('assets/images/title_image.png'),
+                  ),
+                ),
+              ),
+              Text(
+                'Sleep Better\nWake up Happier',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 32,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'もう2度寝して後悔する生活はやめよう',
+                style: TextStyle(
+                  color: Colors.white.withOpacity(0.7),
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(height: 36),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/set_alarm');
+                },
+                child: Text(
+                  'Get Start!',
+                  style: TextStyle(fontSize: 16, color: Colors.black),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xFFFFA630),
+                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  minimumSize: Size(double.infinity, 50),
+                  elevation: 5.0,
+                  shadowColor: Colors.black,
+                ),
+              ),
+              SizedBox(height: 32),
+            ],
           ),
         ),
       ),
     );
   }
 }
+
 
 class AlarmSettingScreen extends StatelessWidget {
   final _controller = TimePickerController();
@@ -107,7 +146,8 @@ class AlarmSettingScreen extends StatelessWidget {
     final now = DateTime.now();
     final selectedHour = _controller.hour;
     final selectedMinute = _controller.minute;
-    final dateTime = DateTime(now.year, now.month, now.day, selectedHour, selectedMinute);
+    final dateTime =
+        DateTime(now.year, now.month, now.day, selectedHour, selectedMinute);
 
     final alarmSettings = AlarmSettings(
       id: 0,
@@ -339,7 +379,6 @@ class _QRScanPageState extends State<QRScanPage> {
               }
             },
           ),
-
           Positioned(
             child: Stack(
               children: [
@@ -348,33 +387,33 @@ class _QRScanPageState extends State<QRScanPage> {
                   left: 0,
                   child: Container(
                     width: width_screen,
-                    height: hight_screen/2 - 150,
+                    height: hight_screen / 2 - 150,
                     color: Colors.black.withOpacity(0.62),
                   ),
                 ),
                 Positioned(
-                  top: hight_screen/2 + 150,
+                  top: hight_screen / 2 + 150,
                   left: 0,
                   child: Container(
                     width: width_screen,
-                    height: hight_screen/2 - 150,
+                    height: hight_screen / 2 - 150,
                     color: Colors.black.withOpacity(0.62),
                   ),
                 ),
                 Positioned(
-                  top: hight_screen/2 - 150,
+                  top: hight_screen / 2 - 150,
                   left: 0,
                   child: Container(
-                    width: (width_screen-300)/2,
+                    width: (width_screen - 300) / 2,
                     height: 300,
                     color: Colors.black.withOpacity(0.62),
                   ),
                 ),
                 Positioned(
-                  top: hight_screen/2 - 150,
-                  left: width_screen/2 + 150,
+                  top: hight_screen / 2 - 150,
+                  left: width_screen / 2 + 150,
                   child: Container(
-                    width: (width_screen-300)/2,
+                    width: (width_screen - 300) / 2,
                     height: 300,
                     color: Colors.black.withOpacity(0.62),
                   ),
@@ -382,7 +421,6 @@ class _QRScanPageState extends State<QRScanPage> {
               ],
             ),
           ),
-
           Align(
             alignment: Alignment(0, -0.65),
             child: Text(
@@ -394,7 +432,6 @@ class _QRScanPageState extends State<QRScanPage> {
               ),
             ),
           ),
-
           Align(
             alignment: Alignment.center,
             child: Container(
@@ -417,7 +454,7 @@ class _QRScanPageState extends State<QRScanPage> {
                     ),
                   ),
                   Container(
-                    height: hight_screen*0.2,
+                    height: hight_screen * 0.2,
                     child: Text(
                       'Have a beautiful day!',
                       textAlign: TextAlign.center,
@@ -427,23 +464,16 @@ class _QRScanPageState extends State<QRScanPage> {
                       ),
                     ),
                   ),
-
                 ],
               ),
-
             ),
           ),
-
           Positioned(
             top: hight_screen * 0.03, // ステータスバーの高さを加味
             left: 0,
             child: SafeArea(
               child: IconButton(
-                icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                    size: 35
-                ),
+                icon: Icon(Icons.arrow_back, color: Colors.white, size: 35),
                 onPressed: () => Navigator.of(context).pop(), // 画面を閉じて前の画面に戻る
               ),
             ),
@@ -453,4 +483,3 @@ class _QRScanPageState extends State<QRScanPage> {
     );
   }
 }
-
