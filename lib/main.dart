@@ -4,6 +4,8 @@ import 'controllers/time_picker_controller.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'dart:typed_data';
 import 'package:alarm/alarm.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'widgets/streak_display.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -132,6 +134,7 @@ class AlarmSettingScreen extends StatelessWidget {
               child: Text('Stop Alarm'),
               onPressed: () => stopAlarm(context),
             ),
+            StreakDisplay(), //
           ],
         ),
       ),
@@ -178,6 +181,13 @@ class AlarmSettingScreen extends StatelessWidget {
       await Alarm.stop(0);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Alarm stopped')),
+      );
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      int currentStreak = prefs.getInt('streak') ?? 0;
+      currentStreak++;
+      await prefs.setInt('streak', currentStreak);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Streak updated to $currentStreak days')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
